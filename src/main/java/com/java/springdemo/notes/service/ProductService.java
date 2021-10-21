@@ -1,6 +1,6 @@
-package com.java.springdemo.notes.product.service;
+package com.java.springdemo.notes.service;
 
-import com.java.springdemo.notes.product.model.Product;
+import com.java.springdemo.notes.model.Product;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;

@@ -1,7 +1,8 @@
-package com.java.springdemo.notes.product.controller;
+package com.java.springdemo.notes.controller;
 
-import com.java.springdemo.notes.product.model.Product;
-import com.java.springdemo.notes.product.service.ProductService;
+import com.java.springdemo.notes.exception.ItemNotFoundException;
+import com.java.springdemo.notes.model.Product;
+import com.java.springdemo.notes.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,9 +32,15 @@ public class ProductController {
         return productService.addNewProduct(newProduct);
     }
 
-    @PutMapping("products/{id}")
-    public Product updateProductById(@PathVariable int id, @RequestBody Product updatedProduct) {
-        return productService.updateProductPrice(id, updatedProduct);
+    @PutMapping("/products")
+    public ResponseEntity<Product> updateProductById(@RequestBody Product updatedProduct) {
+        if(productService.retrieveProductById(updatedProduct.getId()) == null) {
+            throw new ItemNotFoundException();
+        }
+//        else {
+//            productService.updateProductPrice(updatedProduct.getId(), updatedProduct);
+//        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/products/{id}")
