@@ -12,11 +12,11 @@ public class BookGlobalExceptionController {
 
     @ExceptionHandler(FirstBookGlobalNotFoundException.class)
     public ResponseEntity<Object> handleBookNotFoundException(FirstBookGlobalNotFoundException firstBookGlobalNotFoundException) {
-        return new ResponseEntity<>("Book Not Found From Global Exception", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Book Not Found", HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SecondBookGlobalBadRequestException.class)
     public ResponseEntity<Object> handleBookBadRequestException(SecondBookGlobalBadRequestException secondBookGlobalBadRequestException) {
-        return new ResponseEntity<>("Book Bad Request From Global Exception", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Book Already Existed", HttpStatus.BAD_REQUEST);
     }
 }

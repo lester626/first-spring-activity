@@ -1,4 +1,4 @@
-package com.java.springdemo.notes.model;
+package com.java.springdemo.exercises.bookexercise.model;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-//@Configuration
-//@ConfigurationProperties("spring.datasource")
+@Configuration
+@ConfigurationProperties("spring.datasource")
 @Data
 public class DBConfiguration {
     private String driverClassName;
@@ -15,26 +15,10 @@ public class DBConfiguration {
     private String username;
     private String password;
 
-    @Profile("dev")
+    @Profile("book")
     @Bean
     public String devDbConnection() {
-        String message = "DB Connection for Dev";
-        printDetails(message);
-        return message;
-    }
-
-    @Profile("prod")
-    @Bean
-    public String prodDbConnection() {
-        String message = "DB Connection for Prod";
-        printDetails(message);
-        return message;
-    }
-
-    @Profile("test")
-    @Bean
-    public String testDbConnection() {
-        String message = "DB Connection for Test";
+        String message = "DB Connection for Book";
         printDetails(message);
         return message;
     }
