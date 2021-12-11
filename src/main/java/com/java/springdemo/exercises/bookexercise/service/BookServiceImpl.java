@@ -5,13 +5,20 @@ import com.java.springdemo.exercises.bookexercise.exception.global.SecondBookGlo
 import com.java.springdemo.exercises.bookexercise.model.Book;
 import com.java.springdemo.exercises.bookexercise.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.Valid;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 public class BookServiceImpl implements BookService{
@@ -37,14 +44,14 @@ public class BookServiceImpl implements BookService{
 
     @Override
     @Transactional
-    public String addNewBook(@RequestBody List<Book> bookList) {
+    public String addNewBook(List<Book> bookList) {
         int numOfBooks = (int) bookRepository.count() + 1;
         String message = "Number of books: " + numOfBooks + ", Books Added";
-        for(Book book: bookList) {
-            if(bookRepository.existsById(book.getId())) {
-                throw new SecondBookGlobalBadRequestException();
-            }
-        }
+//        for(Book book: bookList) {
+//            if(bookRepository.existsById(book.getId())) {
+//                throw new SecondBookGlobalBadRequestException();
+//            }
+//        }
         bookRepository.saveAll(bookList);
         return message;
     }
@@ -53,9 +60,9 @@ public class BookServiceImpl implements BookService{
     @Transactional
     public String updateBook(Book updatedBook) {
         String message = "Book is updated";
-        if(!bookRepository.existsById(updatedBook.getId())) {
-            throw new FirstBookGlobalNotFoundException();
-        }
+//        if(!bookRepository.existsById(updatedBook.getId())) {
+//            throw new FirstBookGlobalNotFoundException();
+//        }
         bookRepository.save(updatedBook);
         return message;
     }

@@ -11,9 +11,15 @@ import com.java.springdemo.exercises.bookexercise.service.BookServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.*;
+import javax.validation.constraints.NotEmpty;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
@@ -21,6 +27,9 @@ public class BookController {
 
     @Autowired
     BookServiceImpl bookServiceImpl;
+    
+    @Valid
+    private List<Book> newBooks;
 
     // GET All Books
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -31,21 +40,21 @@ public class BookController {
     // GET Book by ID
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     public Book getBookById(@PathVariable int id) {
-        if(bookServiceImpl.retrieveBookById(id) == null) {
-            throw new FirstBookGlobalNotFoundException();
-        }
+//        if(bookServiceImpl.retrieveBookById(id) == null) {
+//            throw new FirstBookGlobalNotFoundException();
+//        }
         return bookServiceImpl.retrieveBookById(id);
     }
 
     // POST Book
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public String postBook(@RequestBody List<Book> newBooks) {
+    public String postBook(@RequestBody @Valid List<Book> newBooks) {
         return bookServiceImpl.addNewBook(newBooks);
     }
 
     // PUT Book
     @RequestMapping(value = "/", method = RequestMethod.PUT)
-    public String updateBookById(@RequestBody Book updatedBook) {
+    public String updateBookById(@Valid @RequestBody Book updatedBook) {
         return bookServiceImpl.updateBook(updatedBook);
     }
 
@@ -53,6 +62,18 @@ public class BookController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public String deleteBook(@PathVariable int id) {
         return bookServiceImpl.deleteBookById(id);
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleArgumentNotValidException(final MethodArgumentNotValidException argumentNotValidException) {
+        Map<String, String> errors = new HashMap<>();
+        argumentNotValidException.getBindingResult().getAllErrors().forEach(objectError -> {
+            String field = ((FieldError) objectError).getField();
+            String errorMessage = objectError.getDefaultMessage();
+            errors.put(field, errorMessage);
+        });
+        return errors;
     }
 
     //GET Book by ID via Params

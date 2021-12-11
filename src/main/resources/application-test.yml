@@ -1,9 +1,9 @@
+server:
+  port: 8800
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc://test:3306/profiles
     username: test
     password: test
-
-server:
-  port: 8800
